@@ -46,6 +46,7 @@ body, html {
     background-size: cover;
     background-image: url("../resources/images/background.jpg");
     height: 100%;
+    font-family: 'Nunito', sans-serif;
   }
   .game-board {
       background-color: #027673;
@@ -71,6 +72,9 @@ body, html {
       border-radius: 20px;
       background-color: rgb(26, 150, 1);
       transition: 0.25s;
+      display: inline-block;
+      width: 350px;
+      font-size: 40px;
   }
   #buttons:hover {
       background-color: rgb(39, 233, 0);
@@ -471,3 +475,27 @@ p {
     padding-right: 15px;
     padding-bottom: 10px;
 } 
+
+.room-divs {
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    height: 33%;
+}
+#roomForm {
+    color: black;
+    text-decoration: none;
+    text-align: center;
+    padding: 20px;
+    border: 2px solid black;
+    border-radius: 20px;
+    background-color: rgb(26, 150, 1);
+    transition: 0.25s;
+    display: inline-block;
+    width: 350px;
+    font-size: 40px;
+}
+#roomForm:hover {
+    background-color: rgb(39, 233, 0);
+      transition: 0.25s;
+}

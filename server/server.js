@@ -10,6 +10,10 @@ console.log('serving static from ' + clientPath);
 
 app.use(express.static(clientPath));
 
+app.use(express.urlencoded({
+    extended: true
+}));
+
 const server = http.createServer(app);
 
 const io = socketio(server);
@@ -17,6 +21,10 @@ const io = socketio(server);
 let text = "";
 
 let connectionNum = 0;
+
+let rooms = [
+    ["ABCD", "player-select", 0]
+];
 
 let players = [false, false, false, false];
 let botsHands = [
@@ -209,9 +217,27 @@ function getTile() {
     return tile;
 }
 
+
+
 io.on('connection', (sock) => {
     connectionNum++;
-    sock.emit('connection', connectionNum);   
+    //sock.emit('connection', connectionNum);
+    sock.on('room-req', (roomCode) => {
+        let roomOpen = false;
+        for (let i = 0; i < rooms.length; i++) {
+            if (rooms[i].includes(roomCode)) {
+                roomOpen = true;
+                break;
+            }
+        }
+        if (roomOpen) {
+            console.log("entered room")
+            sock.join(roomCode);
+            sock.emit('roomEntrySuccess', roomCode);
+        } else {
+            sock.emit('roomEntryFail', roomCode);
+        }
+    });
     sock.on('updatePlayerNum', (connectNum) => {
         io.emit('updatePlayerNum', connectNum);
     });
