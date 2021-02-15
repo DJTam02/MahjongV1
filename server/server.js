@@ -23,7 +23,7 @@ let text = "";
 let connectionNum = 0;
 
 let rooms = [
-    ["ABCD", "player-select", 0]
+    ["ABCD", "game-setup", 0]
 ];
 
 let players = [false, false, false, false];
@@ -223,19 +223,17 @@ io.on('connection', (sock) => {
     connectionNum++;
     //sock.emit('connection', connectionNum);
     sock.on('room-req', (roomCode) => {
-        let roomOpen = false;
+        let errorCode = 404;
         for (let i = 0; i < rooms.length; i++) {
             if (rooms[i].includes(roomCode)) {
-                roomOpen = true;
-                break;
+                console.log("entered room")
+                sock.join(roomCode);
+                rooms[i][2]++;
+                sock.emit('roomEntrySuccess', roomCode, rooms[i][1]);
             }
         }
-        if (roomOpen) {
-            console.log("entered room")
-            sock.join(roomCode);
-            sock.emit('roomEntrySuccess', roomCode);
-        } else {
-            sock.emit('roomEntryFail', roomCode);
+        if (roomCode == 404) {
+            sock.emit('roomEntryFail', roomCode, errorCode);
         }
     });
     sock.on('updatePlayerNum', (connectNum) => {
