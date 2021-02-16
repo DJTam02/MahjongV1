@@ -1,4 +1,3 @@
-const sock = io();
 let hand = new Array();
 let draw = new Array();
 let bots = ["", "", "", ""];

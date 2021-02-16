@@ -80,7 +80,27 @@ body, html {
       background-color: rgb(39, 233, 0);
       transition: 0.25s;
   }
-  #player-select {
+  #back {
+    display: none;
+    color: black;
+    text-decoration: none;
+    text-align: center;
+    padding: 20px;
+    border: 2px solid black;
+    border-radius: 20px;
+    background-color: rgb(26, 150, 1);
+    transition: 0.25s;
+    width: 120px;
+    font-size: 25px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+#back:hover {
+    background-color: rgb(39, 233, 0);
+    transition: 0.25s;
+}
+  .player-select {
       width: 20%;
       border: 2px solid black;
       background-color: white;
@@ -88,6 +108,7 @@ body, html {
       padding-top: 10px;
       padding-bottom: 40px;
       margin: auto;
+      display: inline-block;
   }
   #p1, #p2, #p3, #p4 {
       padding: 5px;
@@ -498,4 +519,17 @@ p {
 #roomForm:hover {
     background-color: rgb(39, 233, 0);
       transition: 0.25s;
+}
+#game {
+    display: none;
+}
+#player-select {
+    display: none;
+}
+#room {
+    display: none;
+    height: 100%;
+}
+#how-to-play {
+    display: none;
 }

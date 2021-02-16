@@ -10,20 +10,480 @@
     </head>
     <body>
         <div class="bg">
-            <div id="header">
-                <h1 id="opening-text">Welcome to my Mahjong game!</h1>
+            <button id="back" onclick="back();">Back</button>
+            <div id="start">
+                <div id="header">
+                    <h1 id="opening-text">Welcome to my Mahjong game!</h1>
+                </div>
+                <!--
+                <div id="players">
+                    <p>Players Connected</p>
+                    <p id="player-num">0</p>
+                </div>-->
+                <div id="buttons-div">
+                    <button id="buttons" onclick="swap('start', 'how-to-play');">How To Play</button>
+                    <button id="buttons" onclick="swap('start', 'room');">Start</button>
+                </div>
             </div>
-            <!--
-            <div id="players">
-                <p>Players Connected</p>
-                <p id="player-num">0</p>
-            </div>-->
-            <div id="buttons-div">
-                <a id="buttons" href="how-to-play.html">How To Play</a>
-                <a id="buttons" href="room.html">Start</a>
+            <div id="player-select">
+                <div id="players">
+                    <p>Players Connected</p>
+                    <p id="player-num">0</p>
+                </div>
+                <h1 id="header">Please select the settings for your game</h1>
+                <div id="dropdown-div" class="row">
+                    <div class="player-select">
+                        <h4>Player 1</h4>
+                        <form id="p1">
+                            Name <input type="text" name="p1name" id="p1name" oninput="typing('p1')"><br>
+                            <input type="checkbox" name="p1computer" id="p1computer" value="true" onclick="cpuTrue('p1')">
+                            <label style="margin-top: 15px;"  for="p1computer">Computer Player</label><br>
+                            <input checked type="checkbox" name="p1computerl1" id="p1computerl1" value="1" onclick="isChecked('p1', '1')">
+                            <label style="margin-top: 15px; margin-bottom: 15px;" class="p1checkLabel" for="p1computerl1">Level 1</label>
+                            <input type="checkbox" name="p1computerl2" id="p1computerl2" value="2" onclick="isChecked('p1', '2')">
+                            <label style="margin-top: 15px; margin-bottom: 15px;" class="p1checkLabel" for="p1computerl2">Level 2</label>
+                            <input type="checkbox" name="p1computerl3" id="p1computerl3" value="3" onclick="isChecked('p1', '3')">
+                            <label style="margin-top: 15px; margin-bottom: 15px;" class="p1checkLabel" for="p1computerl3">Level 3</label><br>
+                            <button id="p1Confirm">Confirm</button>
+                        </form>
+                        <div id="p1Cancel">
+                            <h6 id="p1name-filled"></h6>
+                            <button onclick="cancelConfirm('p1')" id="p1cancel-button" disabled="true">Cancel</button>
+                        </div>
+                    </div>
+                    <div class="player-select">
+                        <h4>Player 2</h4>
+                        <form id="p2" onsubmit="return submit('p2')">
+                            Name <input type="text" name="p2name" id="p2name" oninput="typing('p2')"><br>
+                            <input type="checkbox" name="p2computer" id="p2computer" value="true" onclick="cpuTrue('p2')">
+                            <label style="margin-top: 15px;" for="p2computer">Computer Player</label><br>
+                            <input checked type="checkbox" name="p2computerl1" id="p2computerl1" value="1" onclick="isChecked('p2', '1')">
+                            <label style="margin-top: 15px; margin-bottom: 15px;" class="p2checkLabel" for="p2computerl1">Level 1</label>
+                            <input type="checkbox" name="p2computerl2" id="p2computerl2" value="2" onclick="isChecked('p2', '2')">
+                            <label style="margin-top: 15px; margin-bottom: 15px;" class="p2checkLabel" for="p2computerl2">Level 2</label>
+                            <input type="checkbox" name="p2computerl3" id="p2computerl3" value="3" onclick="isChecked('p2', '3')">
+                            <label style="margin-top: 15px; margin-bottom: 15px;" class="p2checkLabel" for="p2computerl3">Level 3</label><br>
+                            <button id="p2Confirm">Confirm</button>
+                        </form>
+                        <div id="p2Cancel">
+                            <h6 id="p2name-filled"></h6>
+                            <button onclick="cancelConfirm('p2')" id="p2cancel-button" disabled="true">Cancel</button>
+                        </div>
+                    </div>
+                    <div class="player-select">
+                        <h4>Player 3</h4>
+                        <form id="p3" onsubmit="return submit('p3')">
+                            Name <input type="text" name="p3name" id="p3name" oninput="typing('p3')"><br>
+                            <input type="checkbox" name="p3computer" id="p3computer" value="true" onclick="cpuTrue('p3')">
+                            <label style="margin-top: 15px;" for="p3computer">Computer Player</label><br>
+                            <input checked type="checkbox" name="p3computerl1" id="p3computerl1" value="1" onclick="isChecked('p3', '1')">
+                            <label style="margin-top: 15px; margin-bottom: 15px;" class="p3checkLabel" for="p3computerl1">Level 1</label>
+                            <input type="checkbox" name="p3computerl2" id="p3computerl2" value="2" onclick="isChecked('p3', '2')">
+                            <label style="margin-top: 15px; margin-bottom: 15px;" class="p3checkLabel" for="p3computerl2">Level 2</label>
+                            <input type="checkbox" name="p3computerl3" id="p3computerl3" value="3" onclick="isChecked('p3', '3')">
+                            <label style="margin-top: 15px; margin-bottom: 15px;" class="p3checkLabel" for="p3computerl3">Level 3</label><br>
+                            <button id="p3Confirm">Confirm</button>
+                        </form>
+                        <div id="p3Cancel">
+                            <h6 id="p3name-filled"></h6>
+                            <button onclick="cancelConfirm('p3')" id="p3cancel-button" disabled="true">Cancel</button>
+                        </div>
+                    </div>
+                    <div class="player-select">
+                        <h4>Player 4</h4>
+                        <form id="p4" onsubmit="return submit('p4')">
+                            Name <input type="text" name="p4name" id="p4name" oninput="typing('p4')"><br>
+                            <input type="checkbox" name="p4computer" id="p4computer" value="true" onclick="cpuTrue('p4')">
+                            <label style="margin-top: 15px;" for="p4computer">Computer Player</label><br>
+                            <input checked type="checkbox" name="p4computerl1" id="p4computerl1" value="1" onclick="isChecked('p4', '1')">
+                            <label style="margin-top: 15px; margin-bottom: 15px;" class="p4checkLabel" for="p4computerl1">Level 1</label>
+                            <input type="checkbox" name="p4computerl2" id="p4computerl2" value="2" onclick="isChecked('p4', '2')">
+                            <label style="margin-top: 15px; margin-bottom: 15px;" class="p4checkLabel" for="p4computerl2">Level 2</label>
+                            <input type="checkbox" name="p4computerl3" id="p4computerl3" value="3" onclick="isChecked('p4', '3')">
+                            <label style="margin-top: 15px; margin-bottom: 15px;" class="p4checkLabel" for="p4computerl3">Level 3</label><br>
+                            <button id="p4Confirm">Confirm</button> 
+                        </form>
+                        <div id="p4Cancel">
+                            <h6 id="p4name-filled"></h6>
+                            <button onclick="cancelConfirm('p4')" id="p4cancel-button" disabled="true">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; padding-top: 100px;">
+                    <button onclick="checkPlayers()" id="buttons">Start Game</button>
+                </div>
+            </div>
+            <div id="how-to-play">
+
+            </div>
+            <div id="room">
+                <div style="display: flex; align-items: center; height: 100%;">
+                    <div style="height: 80%; width: 100%;">
+                        <div id="create-game" class="room-divs">
+                            <button id="buttons" onclick="swap('room', 'create-room');">Create Room</button>
+                        </div>
+                        <div id="join-room" class="room-divs">
+                            <form id="roomForm" onsubmit="return false;">
+                                <label for="roomID">Room ID:</label><br>
+                                <input id="roomID" name="roomID" type="text" style="text-align: center; font-size: 20px;">
+                            </form>
+                        </div>
+                        <div id="find-room" class="room-divs">
+                            <button id="buttons" onclick="swap('room', 'find-room');">Find Room</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="game">
+                <div class="game-board">
+                    <p id="player-name3"></p>
+                    <p id="player-name2"></p>
+                    <p id="player-name1"></p>
+                    <p id="player-name0"></p>
+                    <div id="top-left" class="row">
+                        <div id="left-flower-and-fin">
+                            <div id="flower3">
+                                <button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button>
+                            </div>
+                            <div id="fin3">
+                                <button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button>
+                            </div>
+                        </div>
+                        <div id="compass">
+                            <img src="resources/images/tempCompass.jpg" style="width: 100%; height: 100%;"></img>
+                        </div>
+                    </div>
+                    <div id="top-right">
+                        <div id="top-flower-and-fin" class="row">
+                            <div id="fin2">
+                                <button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button>
+                            </div>
+                            <div id="flower2">
+                                <button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button>
+                            </div>
+                        </div>
+                        <div id="round-wind">
+                            <p class="text">Round Wind</p>
+                            <img id="round-wind-img" src="resources/images/east.jpg" style="width: auto; height: 50%;"></img>
+                        </div>
+                    </div>
+                    <div id="square">
+                        <div id="hand2">
+                            <button class="tile-vert tile"></button><!--
+                            --><button class="tile-vert tile"></button><!--
+                            --><button class="tile-vert tile"></button><!--
+                            --><button class="tile-vert tile"></button><!--
+                            --><button class="tile-vert tile"></button><!--
+                            --><button class="tile-vert tile"></button><!--
+                            --><button class="tile-vert tile"></button><!--
+                            --><button class="tile-vert tile"></button><!--
+                            --><button class="tile-vert tile"></button><!--
+                            --><button class="tile-vert tile"></button><!--
+                            --><button class="tile-vert tile"></button><!--
+                            --><button class="tile-vert tile"></button><!--
+                            --><button class="tile-vert tile"></button><!--
+                            --><button class="tile-vert tile"></button>
+                        </div>
+                        <div id="hand3">
+                            <button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button>
+                        </div>
+                        <div id="draw">
+                            <div id="draw2">
+                                <button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button>
+                            </div>
+                            <div id="draw3">
+                                <button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button>
+                            </div>
+                            <div id="mid"></div>
+                            <div id="draw1">
+                                <button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button><!--
+                                --><button class="tile-horiz tile"></button>
+                            </div>
+                            <div id="draw0">
+                                <button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button><!--
+                                --><button class="tile-vert tile"></button>
+                            </div>
+                        </div>
+                        <div id="hand1">
+                            <button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button><!--
+                            --><button class="tile-horiz tile"></button>
+                        </div>
+                        <div id="hand0">
+                            <button draggable="false" ondragstart="drag(event)" id="hand-1" class="tile-vert tile"><span></span></button><!--
+                            --><button draggable="false" ondragstart="drag(event)" id="hand-2" class="tile-vert tile"><span></span></button><!--
+                            --><button draggable="false" ondragstart="drag(event)" id="hand-3" class="tile-vert tile"><span></span></button><!--
+                            --><button draggable="false" ondragstart="drag(event)" id="hand-4" class="tile-vert tile"><span></span></button><!--
+                            --><button draggable="false" ondragstart="drag(event)" id="hand-5" class="tile-vert tile"><span></span></button><!--
+                            --><button draggable="false" ondragstart="drag(event)" id="hand-6" class="tile-vert tile"><span></span></button><!--
+                            --><button draggable="false" ondragstart="drag(event)" id="hand-7" class="tile-vert tile"><span></span></button><!--
+                            --><button draggable="false" ondragstart="drag(event)" id="hand-8" class="tile-vert tile"><span></span></button><!--
+                            --><button draggable="false" ondragstart="drag(event)" id="hand-9" class="tile-vert tile"><span></span></button><!--
+                            --><button draggable="false" ondragstart="drag(event)" id="hand-10" class="tile-vert tile"><span></span></button><!--
+                            --><button draggable="false" ondragstart="drag(event)" id="hand-11" class="tile-vert tile"><span></span></button><!--
+                            --><button draggable="false" ondragstart="drag(event)" id="hand-12" class="tile-vert tile"><span></span></button><!--
+                            --><button draggable="false" ondragstart="drag(event)" id="hand-13" class="tile-vert tile"><span></span></button><!--
+                            --><button draggable="false" ondragstart="drag(event)" id="hand-14" class="tile-vert tile"><span></span></button><!--
+                            --><button id="roll-dice">Roll Dice</button><!--
+                            --><button id="win">Declare Win</button><!--
+                            --><button id="seung">Seung</button><!--
+                            --><button id="pong">Pong/Gong</button>
+                        </div>
+                    </div>
+                    <div class="row" id="entire-bottom-row" style="position: relative;">
+                        <div id="bot-left">
+                            <div id="score">
+                                <p class="text">Scores</p>
+                                <div class="row">
+                                    <div id="individual-scores">
+                                        <p class="text">P1</p>
+                                        <p class="text" id="p1-score">0</p>
+                                    </div>
+                                    <div id="individual-scores">
+                                        <p class="text">P2</p>
+                                        <p class="text" id="p2-score">0</p>
+                                    </div>
+                                    <div id="individual-scores">
+                                        <p class="text">P3</p>
+                                        <p class="text" id="p3-score">0</p>
+                                    </div>
+                                    <div id="individual-scores">
+                                        <p class="text">P4</p>
+                                        <p class="text" id="p4-score">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="bot-flower-and-fin">
+                                <div class="row">
+                                    <div id="flower0">
+                                        <button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button>
+                                    </div>
+                                    <div id="fin0">
+                                        <button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button><!--
+                                        --><button class="tile-vert tile"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="finished-sections">
+                                <div class="row">
+                                    <div class="playerSets">
+                                        <p>First Set of Three</p>
+                                        <div class="row" id="playerFinished0" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                                    </div>
+                                    <div class="playerSets">
+                                        <p>Second Set of Three</p>
+                                        <div class="row" id="playerFinished1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="playerSets">
+                                        <p>Third Set of Three</p>
+                                        <div class="row" id="playerFinished2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                                    </div>
+                                    <div class="playerSets">
+                                        <p>Fourth Set of Three</p>
+                                        <div class="row" id="playerFinished3" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                                    </div>
+                                </div>
+                                <div class="playerSets" style="margin: auto;">
+                                    <p>Set of Two</p>
+                                    <div class="row" id="playerFinished4" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="bot-right" class="row">
+                            <div id="info">
+                                <p class="text" id="">Please click the "Roll Dice" button to roll the dice.</p>
+                            </div>
+                            <div id="right-flower-and-fin">
+                                <div id="fin1">
+                                    <button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button>
+                                </div>
+                                <div id="flower1">
+                                    <button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button><!--
+                                    --><button class="tile-horiz tile"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        <script>
+            var current = "start";
+        </script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="scripts/client.js"></script>
+        <script src="scripts/game.js"></script>
+        <script src="scripts/index.js"></script>
+        <script src="scripts/room.js"></script>
     </body>
 </html>

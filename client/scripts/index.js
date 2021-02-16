@@ -279,83 +279,6 @@ function resize() {
         }
     }
 }
-//var sum;
-/*function rollDice () {
-    if (document.getElementById("roll-dice")) {
-        var dice = [Math.floor(Math.random() * (6 - 1 + 1)) + 1, Math.floor(Math.random() * (6 - 1 + 1)) + 1, Math.floor(Math.random() * (6 - 1 + 1)) + 1]
-        sum = dice[0] + dice[1] + dice[2];
-        for (var i = 0; i < 3; i++) {
-            var elem = document.createElement("img");
-            elem.setAttribute("class", "dice");
-            elem.setAttribute("height", (w * 3));
-            elem.setAttribute("width", (w * 3));
-            elem.setAttribute("margin", "auto");
-            if (dice[i] == 1) {
-                elem.src = "resources/images/dice1.png";
-            } else if (dice[i] == 2) {
-                elem.src = "resources/images/dice2.png";
-            } else if (dice[i] == 3) {
-                elem.src = "resources/images/dice3.png";
-            } else if (dice[i] == 4) {
-                elem.src = "resources/images/dice4.png";
-            } else if (dice[i] == 5) {
-                elem.src = "resources/images/dice5.png";
-            } else {
-                elem.src = "resources/images/dice6.png";
-            }
-            document.getElementById("mid").appendChild(elem);
-        }
-        document.getElementById("roll-dice").innerHTML = "Take Tiles";
-        document.getElementById("roll-dice").id = "take-tiles-button";
-        document.getElementById("info").innerHTML = "The dice has been rolled!";
-    } else if (document.getElementById("take-tiles-button")) {
-        document.getElementById("mid").innerHTML ="";
-        var draw = new Array();
-        var pos = sum % 4;
-        if (pos == 2) {
-            draw = Array.prototype.slice.call(document.getElementsByClassName("draw2")).reverse();
-            draw = draw.concat(Array.prototype.slice.call(document.getElementsByClassName("draw3")).reverse());
-            draw = draw.concat(Array.prototype.slice.call(document.getElementsByClassName("draw4")));
-            draw = draw.concat(Array.prototype.slice.call(document.getElementsByClassName("draw1")));
-        } else if (pos == 3) {
-            draw = draw = Array.prototype.slice.call(document.getElementsByClassName("draw3")).reverse();
-            draw = draw.concat(Array.prototype.slice.call(document.getElementsByClassName("draw4")));
-            draw = draw.concat(Array.prototype.slice.call(document.getElementsByClassName("draw1")));
-            draw = draw.concat(Array.prototype.slice.call(document.getElementsByClassName("draw2")).reverse());
-        } else if (pos == 1) {
-            draw = Array.prototype.slice.call(document.getElementsByClassName("draw1"));
-            draw = draw.concat(Array.prototype.slice.call(document.getElementsByClassName("draw2")).reverse());
-            draw = draw.concat(Array.prototype.slice.call(document.getElementsByClassName("draw3")).reverse());
-            draw = draw.concat(Array.prototype.slice.call(document.getElementsByClassName("draw4")));
-        } else if (pos == 0) {
-            draw = Array.prototype.slice.call(document.getElementsByClassName("draw4"));
-            draw = draw.concat(Array.prototype.slice.call(document.getElementsByClassName("draw1")));
-            draw = draw.concat(Array.prototype.slice.call(document.getElementsByClassName("draw2")).reverse());
-            draw = draw.concat(Array.prototype.slice.call(document.getElementsByClassName("draw3")).reverse());
-        } 
-        for (let i = sum; i < sum + 26; i++) {
-            draw[i].style.opacity = "0%";
-        }
-        var topHand = document.getElementById("hand2").getElementsByClassName("tile-vert");
-        for (let i = 0; i < topHand.length; i++) {
-            topHand[i].style.opacity = "100%";
-        }
-        var leftHand = document.getElementById("hand3").getElementsByClassName("tile-horiz");
-        for (let i = 0; i < leftHand.length; i++) {
-            leftHand[i].style.opacity = "100%";
-        }
-        var rightHand = document.getElementById("hand1").getElementsByClassName("tile-horiz");
-        for (let i = 0; i < rightHand.length; i++) {
-            rightHand[i].style.opacity = "100%";
-        }
-        showPlayerHand();
-        document.getElementById("take-tiles-button").innerHTML = "Next";
-        document.getElementById("take-tiles-button").id = "next-button";
-        document.getElementById("info").innerHTML = "Each player has collected their tiles. Click next to begin playing.";
-    } else {
-
-    }
-}*/
 function invis() {
     var topHand = document.getElementById("hand2").getElementsByClassName("tile-vert");
     for (let i = 0; i < topHand.length; i++) {
@@ -406,36 +329,26 @@ function invis() {
         rightFlower[i].style.opacity = "0%";
     }
 }
-/*function showPlayerHand() {   replaced: check server.js
-    let allTiles = findAllTiles();
-    let playerHand = new Array(14);
-    var handLength = playerHand.length;
-    for (let i = 0; i < playerHand.length; i++) {
-        let ran = Math.floor(Math.random() * (42));
-        if (allTiles[ran].remaining > 0) {
-            player.hand[i] = allTiles[ran];
-            let hand = document.getElementById("hand0").getElementsByClassName("tile-vert");
-            hand[i].innerHTML = "<span>" + botPlayer.hand[i].unicode + "</span>";
-            hand[i].style.padding = "0px";
-            hand[i].style.opacity = "100%"
-            hand[i].style.fontSize = h + "px";
-            hand[i].style.backgroundColor = "transparent";
-            hand[i].style.border = "0px";
-            hand[i].style.color = "black";
-            allTiles[ran].remaining--;
+function swap(from, to) {
+    document.getElementById(from).style.display = "none";
+    document.getElementById(to).style.display = "block";
+    document.getElementById("back").style.display = "inline-block";
+    current = to;
+}
+function back() {
+    document.getElementById(current).style.display = "none";
+    if (current == "how-to-play" || current == "room") {
+        document.getElementById("back").style.display = "none";
+        current = "start";
+    } else if (current == "create-room" || current == "find-room") {
+        current = "room";
+    } else if (current == "player-select" || current == "game") {
+        if (confirm("Are you sure you want to leave?\nYou will leave this session.")) {
+
         } else {
-            i--;
+
         }
+        current = "room";
     }
-}*/
-/*function swap(id) {
-    if (prev == "" || prev == false) {
-        prev = id;
-    } else {
-        var prevText = document.getElementById(prev).textContent;
-        var currText = document.getElementById(id).textContent;
-        document.getElementById(prev).innerHTML = currText;
-        document.getElementById(id).innerHTML = prevText;
-        prev = "";
-    }
-}*/
+    document.getElementById(current).style.display = "block";
+}
