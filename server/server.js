@@ -23,7 +23,7 @@ let text = "";
 let connectionNum = 0;
 
 let rooms = [
-    ["ABCD", "game-setup", 0]
+    ["ABCD", "player-select", 0]
 ];
 
 let players = [false, false, false, false];
@@ -229,7 +229,7 @@ io.on('connection', (sock) => {
                 console.log("entered room")
                 sock.join(roomCode);
                 rooms[i][2]++;
-                sock.emit('roomEntrySuccess', roomCode, rooms[i][1]);
+                sock.emit('roomEntrySuccess', rooms[i][1]);
             }
         }
         if (roomCode == 404) {
