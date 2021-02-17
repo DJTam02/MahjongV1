@@ -23,7 +23,11 @@ let text = "";
 let connectionNum = 0;
 
 let rooms = [
-    ["ABCD", "player-select", 0]
+    ["ABCD", "Player Select", 0, "public"],
+    ["ABCE", "Player Select", 0, "public"],
+    ["ABCF", "Player Select", 0, "public"],
+    ["ABCG", "Player Select", 0, "public"],
+    ["ABCH", "Player Select", 0, "public"]
 ];
 
 let players = [false, false, false, false];
@@ -222,19 +226,22 @@ function getTile() {
 io.on('connection', (sock) => {
     connectionNum++;
     //sock.emit('connection', connectionNum);
-    sock.on('room-req', (roomCode) => {
+    sock.on('room-req', (roomCode, from) => {
         let errorCode = 404;
         for (let i = 0; i < rooms.length; i++) {
             if (rooms[i].includes(roomCode)) {
                 console.log("entered room")
                 sock.join(roomCode);
                 rooms[i][2]++;
-                sock.emit('roomEntrySuccess', rooms[i][1]);
+                sock.emit('roomEntrySuccess', rooms[i][1], from);
             }
         }
         if (roomCode == 404) {
             sock.emit('roomEntryFail', roomCode, errorCode);
         }
+    });
+    sock.on("get-rooms", () => {
+        sock.emit("return-rooms", rooms);
     });
     sock.on('updatePlayerNum', (connectNum) => {
         io.emit('updatePlayerNum', connectNum);

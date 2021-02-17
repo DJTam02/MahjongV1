@@ -334,21 +334,23 @@ function swap(from, to) {
     document.getElementById(to).style.display = "block";
     document.getElementById("back").style.display = "inline-block";
     current = to;
+    if (current == "find") {
+        sock.emit("get-rooms");
+    }
 }
 function back() {
     document.getElementById(current).style.display = "none";
     if (current == "how-to-play" || current == "room") {
         document.getElementById("back").style.display = "none";
         current = "start";
-    } else if (current == "create-room" || current == "find-room") {
+    } else if (current == "create-room" || current == "find") {
         current = "room";
     } else if (current == "player-select" || current == "game") {
-        if (confirm("Are you sure you want to leave?\nYou will leave this session.")) {
-
-        } else {
-
+        var res = confirm("Are you sure you want to leave?\nYou will leave this session.");
+        if (res) {
+            current = "room";
         }
-        current = "room";
     }
+    console.log(current);
     document.getElementById(current).style.display = "block";
 }

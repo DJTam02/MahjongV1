@@ -9,7 +9,7 @@ const connection = (connectNum) => {
 const disconnection = (connectNum) => {
     sock.emit('updatePlayerNum', connectNum);
 }
-const confirm = (info) => {
+const conf = (info) => {
     if (info[2] == true) {
         document.getElementById(info[0] + "name-filled").innerHTML = info[1] + " (CPU Level " + info[3] + ")";
     } else {
@@ -225,7 +225,7 @@ document.getElementById("p4Confirm").addEventListener('click', function(e) {
     }
     e.preventDefault();
 });
-sock.on('confirm', confirm);
+sock.on('confirm', conf);
 
 function cancelConfirm(player) {
     sock.emit('cancel', player);

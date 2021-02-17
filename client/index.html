@@ -129,7 +129,25 @@
                             </form>
                         </div>
                         <div id="find-room" class="room-divs">
-                            <button id="buttons" onclick="swap('room', 'find-room');">Find Room</button>
+                            <button id="buttons" onclick="swap('room', 'find');">Find Room</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="find">
+                <div class="flexbox">
+                    <div id="join-div">
+                        <div id="rooms-show">
+                            <div id="avail-rooms">
+                                <div class="room">
+                                    <div class="room-text" style="margin-top: 0px; margin-bottom: 0px;">Room Code</div>
+                                    <div class="room-text" style="margin-top: 0px; margin-bottom: 0px;">Room State</div>
+                                    <div class="room-text" style="margin-top: 0px; margin-bottom: 0px;">Number of Players</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding: 100px;">
+                            <button id="buttons" onclick="joinRoom();">Confirm</button>
                         </div>
                     </div>
                 </div>
@@ -479,6 +497,7 @@
         </div>
         <script>
             var current = "start";
+            var selected = "";
         </script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="scripts/client.js"></script>
