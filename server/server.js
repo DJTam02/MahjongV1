@@ -37,6 +37,7 @@ let botsHands = [
     new Array(),
     new Array()
 ];
+let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 let roundNum = -1;
 let primaryPlayer = 0;
 let tileCounter = 0;
@@ -230,21 +231,45 @@ io.on('connection', (sock) => {
         let errorCode = 404;
         for (let i = 0; i < rooms.length; i++) {
             if (rooms[i].includes(roomCode)) {
+                errorCode = 1;
                 console.log("entered room")
                 sock.join(roomCode);
                 rooms[i][2]++;
-                sock.emit('roomEntrySuccess', rooms[i][1], from);
+                io.in(roomCode).emit("update-player-num", rooms[i][2]);
+                sock.emit('roomEntrySuccess', rooms[i][1], from, roomCode);
             }
         }
-        if (roomCode == 404) {
+        if (errorCode == 404) {
             sock.emit('roomEntryFail', roomCode, errorCode);
+        }
+    });
+    sock.on("create-room", (private) => {
+        var code = "";
+        var priv = "";
+        for (let i = 0; i < 4; i++) {
+            let rand = Math.floor(Math.random() * 26);
+            console.log(letters.charAt(rand));
+            code += letters.charAt(rand);
+        }
+        if (private) {
+            priv = "private";
+        } else {
+            priv = "public";
+        }   
+        rooms[rooms.length] = [code, "Player Select", 1, priv];
+        sock.join(code);
+        io.in(code).emit("update-player-num", rooms[rooms.length - 1][2]);
+        sock.emit("room-created", code, priv);
+    });
+    sock.on("room-disconnect", (code) => {
+        for (let i = 0; i < rooms.length; i++) {
+            if (rooms[i][0] == code) {
+                rooms[i][2]--;
+            }
         }
     });
     sock.on("get-rooms", () => {
         sock.emit("return-rooms", rooms);
-    });
-    sock.on('updatePlayerNum', (connectNum) => {
-        io.emit('updatePlayerNum', connectNum);
     });
     sock.on('disconnect', function () {
         connectionNum--;

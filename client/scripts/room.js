@@ -1,7 +1,14 @@
 document.getElementById("roomForm").addEventListener("submit", function() {
     sock.emit("room-req", document.getElementById("roomID").value, "room");
 });
-sock.on("roomEntrySuccess", (state, from) => {
+document.getElementById("room-popup").addEventListener("click", function (e) {
+    if (e.target.classList[0] == "flexbox") {
+        document.getElementById("room-popup").style.display = "none";
+    }
+});
+
+sock.on("roomEntrySuccess", (state, from, roomCode) => {
+    code = roomCode;
     document.getElementById("roomID").value = "";
     if (state == "In Game") {
         swap(from, "game");
@@ -31,6 +38,12 @@ sock.on("return-rooms", (allRooms) => {
         }
     }
 });
+sock.on("room-created", (roomCode, priv) => {
+    console.log(roomCode, priv);
+    code = roomCode;
+    document.getElementById("room-popup").style.display = "none";
+    swap("room", "player-select");
+});
 
 function selectRoom(e) {
     var el;
@@ -49,3 +62,6 @@ function joinRoom () {
     console.log(selected.firstChild.innerHTML);
     sock.emit("room-req", selected.firstChild.innerHTML, "find");
 }
+function createRoom() {
+    sock.emit("create-room", document.getElementById("private").checked);
+} 

@@ -1,8 +1,4 @@
 //Game Setup
-const updatePlayerNum = (num) => {
-    const text = document.querySelector('#player-num');
-    text.innerHTML = num;
-}
 const connection = (connectNum) => {
     sock.emit('updatePlayerNum', connectNum);
 }
@@ -90,8 +86,10 @@ const updateField = (player, text) => {
 
 //Game Setup
 const sock = io();
+sock.on("update-player-num", function (num) {
+    document.getElementById("player-num").innerHTML = num;
+});
 sock.on('connection', connection);
-sock.on('updatePlayerNum', updatePlayerNum);
 
 document.getElementById("p1Confirm").addEventListener('click', function(e) {
     if (document.getElementById("p1name").value.trim() == "") { 
@@ -315,16 +313,3 @@ sock.on('gameNotReady', () => {
     alert("Please enter all players!");
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-//Game

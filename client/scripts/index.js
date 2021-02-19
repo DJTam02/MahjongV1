@@ -344,11 +344,14 @@ function back() {
         document.getElementById("back").style.display = "none";
         current = "start";
     } else if (current == "create-room" || current == "find") {
+        document.getElementById("avail-rooms").innerHTML = '<div class="room"><div class="room-text" style="margin-top: 0px; margin-bottom: 0px;">Room Code</div><div class="room-text" style="margin-top: 0px; margin-bottom: 0px;">Room State</div><div class="room-text" style="margin-top: 0px; margin-bottom: 0px;">Number of Players</div></div>';
         current = "room";
     } else if (current == "player-select" || current == "game") {
         var res = confirm("Are you sure you want to leave?\nYou will leave this session.");
         if (res) {
-            current = "room";
+            current = "room"; 
+            sock.emit("room-disconnect", code);
+            document.getElementById("avail-rooms").innerHTML = '<div class="room"><div class="room-text" style="margin-top: 0px; margin-bottom: 0px;">Room Code</div><div class="room-text" style="margin-top: 0px; margin-bottom: 0px;">Room State</div><div class="room-text" style="margin-top: 0px; margin-bottom: 0px;">Number of Players</div></div>';
         }
     }
     console.log(current);

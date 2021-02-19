@@ -81,6 +81,9 @@ body, html {
       background-color: rgb(39, 233, 0);
       transition: 0.25s;
   }
+  #buttons:focus {
+      outline: none;
+  }
   #back {
     display: none;
     color: black;
@@ -136,6 +139,25 @@ body, html {
     height: 100%;
     width: 100%;
     overflow: auto;
+}
+#room-popup {
+    position: absolute;
+    display: none;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+#create-div {
+    width: 550px;
+    height: 350px;
+    margin: auto;
+    text-align: center;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: white;
+    position: relative;
 }
 .room-text{
     display: inline-block;

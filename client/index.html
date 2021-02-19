@@ -120,7 +120,7 @@
                 <div style="display: flex; align-items: center; height: 100%;">
                     <div style="height: 80%; width: 100%;">
                         <div id="create-game" class="room-divs">
-                            <button id="buttons" onclick="swap('room', 'create-room');">Create Room</button>
+                            <button id="buttons" onclick="document.getElementById('room-popup').style.display = 'block';">Create Room</button>
                         </div>
                         <div id="join-room" class="room-divs">
                             <form id="roomForm" onsubmit="return false;">
@@ -130,6 +130,19 @@
                         </div>
                         <div id="find-room" class="room-divs">
                             <button id="buttons" onclick="swap('room', 'find');">Find Room</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="room-popup">
+                <div class="flexbox">
+                    <div id="create-div">
+                        <div style="width: 100%; position: absolute; top: 50%; transform: translate(0%, -65%);"> 
+                            <br><br>
+                            <input type="checkbox" id="private" style="width: 20px; height: 20px;">
+                            <label for="private" style="font-size: 32px;">Private Room?</label>
+                            <br><br>
+                            <button onclick="createRoom()" id="buttons">Create Room</button>
                         </div>
                     </div>
                 </div>
@@ -498,6 +511,7 @@
         <script>
             var current = "start";
             var selected = "";
+            var code = "";
         </script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="scripts/client.js"></script>
