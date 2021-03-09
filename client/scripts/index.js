@@ -350,7 +350,8 @@ function back() {
         var res = confirm("Are you sure you want to leave?\nYou will leave this session.");
         if (res) {
             current = "room"; 
-            sock.emit("room-disconnect", code);
+            sock.emit("room-disconnect");
+            code = "";
             document.getElementById("avail-rooms").innerHTML = '<div class="room"><div class="room-text" style="margin-top: 0px; margin-bottom: 0px;">Room Code</div><div class="room-text" style="margin-top: 0px; margin-bottom: 0px;">Room State</div><div class="room-text" style="margin-top: 0px; margin-bottom: 0px;">Number of Players</div></div>';
         }
     }

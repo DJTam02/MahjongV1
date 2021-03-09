@@ -502,12 +502,6 @@ h1, h2, h3, h4, h5, h6, p {
 p {
     margin-top: 20px;
 }
-#p1computerl1, #p1computerl2, #p1computerl3, #p2computerl1, #p2computerl2, #p2computerl3, #p3computerl1, #p3computerl2, #p3computerl3, #p4computerl1, #p4computerl2, #p4computerl3 {
-    display: none;
-} 
-.p1checkLabel, .p2checkLabel, .p3checkLabel, .p4checkLabel {
-    display: none;
-}
 
 
 

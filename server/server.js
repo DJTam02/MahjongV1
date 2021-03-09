@@ -22,13 +22,41 @@ let text = "";
 
 let connectionNum = 0;
 
-let rooms = [
-    ["ABCD", "Player Select", 0, "public"],
-    ["ABCE", "Player Select", 0, "public"],
-    ["ABCF", "Player Select", 0, "public"],
-    ["ABCG", "Player Select", 0, "public"],
-    ["ABCH", "Player Select", 0, "public"]
-];
+class Tile {
+    constructor (newSuit, newValue, newRemaining, newUnicode) {
+        this.suit = newSuit;
+        this.value = newValue,
+        this.remaining = newRemaining;
+        this.unicode = newUnicode;
+    }
+    reduce() {
+        this.remaining--;
+    }
+}
+class Player {
+    constructor(name, isCPU, level) {
+        this.name = name;
+        this.isCPU = isCPU;
+        this.level = level;
+        this.finished = new Array(0);
+        this.flower = new Array(0);
+        this.hand = new Array(0);
+    }
+}
+class Room {
+    constructor(state, numPlayers, protection) {
+        this.state = state;
+        this.numPlayers = numPlayers;
+        this.visibility = protection;
+        this.players = new Array(4);
+    }
+    addPlayer(info) {
+        var playerNum = parseInt(info[0].substring(1, 2)) - 1;
+        this.players[playerNum] = new Player(info[1], info[2], info[3]);
+    }
+}
+
+let rooms = {ABCD: new Room("Player Select", 0, "public")};
 
 let players = [false, false, false, false];
 let botsHands = [
@@ -134,27 +162,7 @@ function gameEvent(tiles, playerNum) {
     players[playerNum].handIndex -= tiles.length;
     io.emit("game-event", tiles, playerNum, lastFin, lastHand);
 }
-class Tile {
-    constructor (newSuit, newValue, newRemaining, newUnicode) {
-        this.suit = newSuit;
-        this.value = newValue,
-        this.remaining = newRemaining;
-        this.unicode = newUnicode;
-    }
-    reduce() {
-        this.remaining--;
-    }
-}
-class Player {
-    constructor (name, isCPU, level, finIndex, flowerIndex, handIndex) {
-        this.name = name;
-        this.isCPU = isCPU;
-        this.level = level;
-        this.finIndex = finIndex;
-        this.flowerIndex = flowerIndex;
-        this.handIndex = handIndex;
-    }
-}
+
 
 function findAllTiles() {
     let allTiles = new Array(42);
@@ -225,19 +233,19 @@ function getTile() {
 
 
 io.on('connection', (sock) => {
-    connectionNum++;
+    //connectionNum++;
     //sock.emit('connection', connectionNum);
+    let thisCode = "";
     sock.on('room-req', (roomCode, from) => {
         let errorCode = 404;
-        for (let i = 0; i < rooms.length; i++) {
-            if (rooms[i].includes(roomCode)) {
-                errorCode = 1;
-                console.log("entered room")
-                sock.join(roomCode);
-                rooms[i][2]++;
-                io.in(roomCode).emit("update-player-num", rooms[i][2]);
-                sock.emit('roomEntrySuccess', rooms[i][1], from, roomCode);
-            }
+        if (rooms.hasOwnProperty(roomCode)) {
+            errorCode = 1;
+            console.log("entered room")
+            sock.join(roomCode);
+            thisCode = roomCode;
+            rooms[roomCode].numPlayers++;
+            io.in(roomCode).emit("update-player-num", rooms[roomCode].numPlayers);
+            sock.emit('roomEntrySuccess', rooms[roomCode].state, from, roomCode);
         }
         if (errorCode == 404) {
             sock.emit('roomEntryFail', roomCode, errorCode);
@@ -256,21 +264,27 @@ io.on('connection', (sock) => {
         } else {
             priv = "public";
         }   
-        rooms[rooms.length] = [code, "Player Select", 1, priv];
+        rooms[code] = new Room("Player Select", 1, priv);
         sock.join(code);
-        io.in(code).emit("update-player-num", rooms[rooms.length - 1][2]);
+        thisCode = code;
         sock.emit("room-created", code, priv);
+        io.in(code).emit("update-player-num", rooms[code].numPlayers);
     });
-    sock.on("room-disconnect", (code) => {
-        for (let i = 0; i < rooms.length; i++) {
-            if (rooms[i][0] == code) {
-                rooms[i][2]--;
-            }
-        }
+    sock.on("room-disconnect", () => {
+        sock.leave(thisCode);
+        rooms[thisCode].numPlayers--;
+        io.in(thisCode).emit("update-player-num", rooms[code].numPlayers);
+        thisCode = ""
     });
     sock.on("get-rooms", () => {
         sock.emit("return-rooms", rooms);
     });
+    sock.on("lock-in", (info) => {
+        rooms[thisCode].addPlayer(info);
+        io.in(thisCode).emit("fill-player", info);
+    });
+
+
     sock.on('disconnect', function () {
         connectionNum--;
         io.emit('updatePlayerNum', connectionNum);
@@ -281,9 +295,7 @@ io.on('connection', (sock) => {
         io.emit('confirm', info);
     });
     sock.on('cancel', (player) => {
-        let playerNum = parseInt(player.charAt(1)) - 1;
-        players[playerNum] = false;
-        io.emit('cancel', player);
+        io.in(thisCode).emit('cancel', player);
     });
     sock.on('checkPlayers', () => {
         if (players[0] != false && players[1] != false && players[2] != false && players[3] != false) {
@@ -306,6 +318,7 @@ io.on('connection', (sock) => {
             sock.emit('gameNotReady');
         }
     });
+    /*
     sock.on('cpuTrue', (player, isSelected) => {
         io.emit('cpuTrue', player, isSelected);
     });
@@ -314,7 +327,7 @@ io.on('connection', (sock) => {
     });
     sock.on('typing', (player, text) => {
         io.emit('typing', player, text);
-    });
+    });*/
     sock.on('get-all-player-names', () => {
         let allNames = new Array(4);
         for (let i = 0; i < 4; i++) {

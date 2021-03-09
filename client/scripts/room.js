@@ -23,16 +23,25 @@ sock.on("roomEntryFail", (roomCode, code) => {
 });
 sock.on("return-rooms", (allRooms) => {
     console.log(allRooms);
-    for (let i = 0; i < allRooms.length; i++) {
-        if (allRooms[i][3] == "public") {
+    for (var key of Object.keys(allRooms)) {
+        if (allRooms[key].visibility == "public") {
             let roomDiv = document.createElement("div");
             roomDiv.classList.add("room");
-            for (let j = 0; j < allRooms[i].length - 1; j++) {
-                let text = document.createElement("p");
-                text.classList.add("room-text");
-                text.innerHTML = allRooms[i][j];
-                roomDiv.appendChild(text);
-            }
+            let text = document.createElement("p");
+            text.classList.add("room-text");
+            text.innerHTML = key;
+            roomDiv.appendChild(text);
+
+            text = document.createElement("p");
+            text.classList.add("room-text");
+            text.innerHTML = allRooms[key].state;
+            roomDiv.appendChild(text);
+
+            text = document.createElement("p");
+            text.classList.add("room-text");
+            text.innerHTML = allRooms[key].numPlayers;
+            roomDiv.appendChild(text);
+
             roomDiv.addEventListener("click", selectRoom);
             document.getElementById("avail-rooms").appendChild(roomDiv);
         }
@@ -59,8 +68,10 @@ function selectRoom(e) {
     el.style.border = "1px solid black";
 }
 function joinRoom () {
-    console.log(selected.firstChild.innerHTML);
-    sock.emit("room-req", selected.firstChild.innerHTML, "find");
+    if (selected != "") {
+        sock.emit("room-req", selected.firstChild.innerHTML, "find");
+        selected = "";
+    }
 }
 function createRoom() {
     sock.emit("create-room", document.getElementById("private").checked);
