@@ -17,8 +17,9 @@ const conf = (info) => {
     document.getElementById(info[0] + "Cancel").style.display = "inline";
 }
 const cancel = (player) => {
-    document.getElementById(player).style.display = "inline";
     document.getElementById(player + "Cancel").style.display = "none";
+    document.getElementById(player).style.display = "block";
+    /*
     document.getElementById("p1name").removeAttribute("disabled");
     document.getElementById("p2name").removeAttribute("disabled");
     document.getElementById("p3name").removeAttribute("disabled");
@@ -42,7 +43,7 @@ const cancel = (player) => {
     var el = document.getElementsByClassName(player + "checkLabel");
     for (var i = 0; i < el.length; i++) {
         el[i].style.display = "none";
-    }
+    }*/
 }
 /*
 const cpuSelected = (player, isSelected) => {
@@ -81,21 +82,54 @@ const updateField = (player, text) => {
 
 //Game Setup
 function playerReset(player) {
-    document.getElementById(player + "name").disabled = false;
-    document.getElementById(player + "computer").disabled = false;
+    document.getElementById(player + "name").value = "";
     document.getElementById(player + "computer").checked = false;
     document.getElementById(player + "levels").style.display = "none";
-    document.getElementById(player + "Confirm").disabled = false;
 }
 function playerDisable(player) {
-    document.getElementById(player + "name").value = "";
     document.getElementById(player + "name").disabled = true;
-    document.getElementById(player + "computer").checked = false;
     document.getElementById(player + "computer").disabled = true;
-    document.getElementById(player + "levels").style.display = "none";
     document.getElementById(player + "Confirm").disabled = true;
+    document.getElementById(player + "cancel-button").disabled = true;
+    for (let i = 0; i < 3; i++) {
+        document.getElementById(player + "computerl" + (i + 1)).disabled = true;
+    }
+}
+function playerSelectReset() {
+    for (let i = 1; i <= 4; i++) {
+        playerReset("p" + i);
+        document.getElementById("p" + i).style.display = "block";
+        document.getElementById("p" + i + "Cancel").style.display = "none";
+        document.getElementById("p" + i + "name").disabled = false;
+        document.getElementById("p" + i + "computer").disabled = false;
+        document.getElementById("p" + i + "Confirm").disabled = false;
+        document.getElementById("p" + i + "cancel-button").disabled = false;
+        document.getElementById("p" + i + "computerl1").disabled = false;
+        document.getElementById("p" + i + "computerl1").checked = true;
+        for (let j = 1; j < 3; j++) {
+            document.getElementById("p" + i + "computerl" + (j + 1)).disabled = false;
+            document.getElementById("p" + i + "computerl" + (j + 1)).checked = false;
+        }
+    }
 }
 const sock = io();
+function setupRoom(state) {
+    for (let i = 0; i < state.length; i++) {
+        if (state[i] != null) {
+            document.getElementById("p" + (i + 1) + "Cancel").style.display = "block";
+            document.getElementById("p" + (i + 1) + "name-filled").innerHTML = state[i].name;
+            document.getElementById("p" + (i + 1)).style.display = "none";
+            if (state[i].isCPU) {
+                document.getElementById("p" + (i + 1) + "name").value = state[i].name;
+                document.getElementById("p" + (i + 1) + "computer").checked = true;
+                document.getElementById("p" + (i + 1) + "levels").style.display = "block";
+                document.getElementById("p" + (i + 1) + "computerl" + state[i].level);
+            } else {
+                document.getElementById("p" + (i + 1) + "cancel-button").disabled = true;
+            }
+        }
+    }
+}
 sock.on("update-player-num", function (num) {
     document.getElementById("player-num").innerHTML = num;
 });
@@ -119,23 +153,30 @@ function playerConfirm(but) {
     var info = [player, name, computer, lvl];
     sock.emit('lock-in', info, code);
     if (!computer) {
+        playerNum = parseInt(player.substring(1, 2));
         for (let i = 1; i <= 4; i++) {
-            if (parseInt(player.substring(1, 2)) != i && document.getElementById("p" + i + "name").disabled == false) {
-                playerDisable("p" + i);
-            }
+            playerDisable("p" + i);
         }
     }
     document.getElementById(player + "Cancel").style.display = "block";
     document.getElementById(player + "name-filled").innerHTML = name;
     document.getElementById(player).style.display = "none";
+    document.getElementById(player + "cancel-button").disabled = false;
 }
 sock.on("fill-player", (info) => {
     var player = info[0];
-    playerReset(player);
     document.getElementById(player).style.display = "none";
     document.getElementById(player + "Cancel").style.display = "block";
     document.getElementById(player + "name-filled").innerHTML = info[1];
-    if (!info[2]) {
+    if (info[2]) {
+        document.getElementById(player + "name").value = info[1];
+        document.getElementById(player + "levels").style.display = "block";
+        document.getElementById(player + "computer").checked = true;
+        for (let i = 1; i <= 3; i++) {
+            document.getElementById(player + "computerl" + i).checked = info[3] == i;
+        }
+    } else {
+        playerReset(player);
         document.getElementById(player + "cancel-button").disabled = true;
     }
 });
@@ -279,8 +320,14 @@ function cancelConfirm(player) {
     document.getElementById(player).style.display = "block";
     document.getElementById(player + "Cancel").style.display = "none";
     for (let i = 1; i <= 4; i++) {
-        if (document.getElementById("p" + i).style.display == "") {
-            playerReset("p" + i);
+        document.getElementById("p" + i + "name").disabled = false;
+        document.getElementById("p" + i + "computer").disabled = false;
+        document.getElementById("p" + i + "Confirm").disabled = false;
+        if (document.getElementById("p" + i + "name").value != "") {
+            document.getElementById("p" + i + "cancel-button").disabled = false;
+        }
+        for (let j = 1; j <= 3; j++) {
+            document.getElementById("p" + i + "computerl" + j).disabled = false;
         }
     }
 }
@@ -334,19 +381,15 @@ function update() {
         }
     });*/
 }
-function checkPlayers() {
-    sock.emit('checkPlayers');
-}
-sock.on("allCPU", () => {
-    alert("There must be atleast one human player!");
-});
+
+/*
 function cpuTrue(player) {
     if (document.getElementById(player + "computer").checked) {
-        document.getElementById(player + "levels").style.display = "inline-block";
+        document.getElementById(player + "levels").style.display = "block";
     } else {
         document.getElementById(player + "levels").style.display = "none";
     }
-}
+}*/
 //sock.on('cpuTrue', cpuSelected);
 function isChecked(parent, level) {
     document.getElementById(parent + "computerl1").checked = false;
@@ -354,6 +397,19 @@ function isChecked(parent, level) {
     document.getElementById(parent + "computerl3").checked = false;
     document.getElementById(parent + "computerl" + level).checked = true;
 }
+function checkPlayers() {
+    sock.emit('checkPlayers', playerNum);
+}
+sock.on("allCPU", () => {
+    alert("Attempted to start the game but all players are computer players. Please have at least one human player.");
+});
+sock.on('gameReady', () => {
+    // Start game
+});
+sock.on('gameNotReady', () => {
+    alert("Attempted to start the game but all players were not entered. Please enter all players.");
+
+});
 //sock.on('checkClicked', boxChecked);
 /*
 function typing(player) {
@@ -361,10 +417,3 @@ function typing(player) {
     sock.emit('typing', player, text);
 }
 sock.on('typing', updateField);*/
-sock.on('gameReady', () => {
-    window.location.href = '/game.html';
-});
-sock.on('gameNotReady', () => {
-    alert("Please enter all players!");
-
-});

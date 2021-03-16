@@ -7,13 +7,16 @@ document.getElementById("room-popup").addEventListener("click", function (e) {
     }
 });
 
-sock.on("roomEntrySuccess", (state, from, roomCode) => {
+sock.on("roomEntrySuccess", (state, from, roomCode, roomState) => {
+    console.log("entered: " + roomCode);
     code = roomCode;
     document.getElementById("roomID").value = "";
     if (state == "In Game") {
         swap(from, "game");
     } else {
         swap(from, "player-select");
+        setupRoom(roomState);
+        document.getElementById("room-code").innerHTML = "Room Code: " + code;
     }
 });
 sock.on("roomEntryFail", (roomCode, code) => {
@@ -51,6 +54,7 @@ sock.on("room-created", (roomCode, priv) => {
     console.log(roomCode, priv);
     code = roomCode;
     document.getElementById("room-popup").style.display = "none";
+    document.getElementById("room-code").innerHTML = "Room Code: " + code;
     swap("room", "player-select");
 });
 

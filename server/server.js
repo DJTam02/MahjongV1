@@ -52,7 +52,12 @@ class Room {
     }
     addPlayer(info) {
         var playerNum = parseInt(info[0].substring(1, 2)) - 1;
+        console.log("player added: " + playerNum);
         this.players[playerNum] = new Player(info[1], info[2], info[3]);
+    }
+    deletePlayer(player) {
+        console.log("player removed: " + player);
+        this.players[parseInt(player.substring(1, 2)) - 1] = null;
     }
 }
 
@@ -245,7 +250,8 @@ io.on('connection', (sock) => {
             thisCode = roomCode;
             rooms[roomCode].numPlayers++;
             io.in(roomCode).emit("update-player-num", rooms[roomCode].numPlayers);
-            sock.emit('roomEntrySuccess', rooms[roomCode].state, from, roomCode);
+            sock.emit('roomEntrySuccess', rooms[roomCode].state, from, roomCode, rooms[roomCode].players);
+            console.log("entered room: " + thisCode);
         }
         if (errorCode == 404) {
             sock.emit('roomEntryFail', roomCode, errorCode);
@@ -269,11 +275,16 @@ io.on('connection', (sock) => {
         thisCode = code;
         sock.emit("room-created", code, priv);
         io.in(code).emit("update-player-num", rooms[code].numPlayers);
+        console.log("entered room: " + thisCode);
     });
-    sock.on("room-disconnect", () => {
+    sock.on("room-disconnect", (playerNum) => {
+        if (playerNum != 0) {
+            rooms[thisCode].deletePlayer("p" + playerNum);
+            io.in(thisCode).emit('cancel', "p" + playerNum);
+        }
         sock.leave(thisCode);
         rooms[thisCode].numPlayers--;
-        io.in(thisCode).emit("update-player-num", rooms[code].numPlayers);
+        io.in(thisCode).emit("update-player-num", rooms[thisCode].numPlayers);
         thisCode = ""
     });
     sock.on("get-rooms", () => {
@@ -281,43 +292,29 @@ io.on('connection', (sock) => {
     });
     sock.on("lock-in", (info) => {
         rooms[thisCode].addPlayer(info);
-        io.in(thisCode).emit("fill-player", info);
-    });
-
-
-    sock.on('disconnect', function () {
-        connectionNum--;
-        io.emit('updatePlayerNum', connectionNum);
-      });
-    sock.on('confirm', (info) => {
-        let playerNum = parseInt(info[0].charAt(1)) - 1;
-        players[playerNum] = new Player(info[1], info[2], info[3], 0, 0, 0);
-        io.emit('confirm', info);
+        sock.to(thisCode).emit("fill-player", info);
     });
     sock.on('cancel', (player) => {
+        rooms[thisCode].deletePlayer(player);
         io.in(thisCode).emit('cancel', player);
     });
     sock.on('checkPlayers', () => {
-        if (players[0] != false && players[1] != false && players[2] != false && players[3] != false) {
-            if (players[0].isCPU && players[1].isCPU && players[2].isCPU && players[3].isCPU) {
-                sock.emit("allCPU");
+        if (rooms[thisCode].players[0] != null && rooms[thisCode].players[1] != null && rooms[thisCode].players[2] != null && rooms[thisCode].players[3] != null) {
+            if (rooms[thisCode].players[0].isCPU && rooms[thisCode].players[1].isCPU && rooms[thisCode].players[2].isCPU && rooms[thisCode].players[3].isCPU) {
+                io.in(thisCode).emit("allCPU");
             } else {
-                if (!players[0].isCPU) {
-                    primaryPlayer = 0;
-                } else if (!players[1].isCPU) {
-                    primaryPlayer = 1;
-                } else if (!players[2].isCPU) {
-                    primaryPlayer = 2;
-                } else {
-                    primaryPlayer = 3;
-                }
-                io.emit('gameReady');
-                allTilesArray = findAllTiles();
+                io.in(thisCode).emit("gameReady");
             }
         } else {
-            sock.emit('gameNotReady');
+            io.in(thisCode).emit("gameNotReady");
         }
     });
+    /*
+    sock.on('confirm', (info) => {
+        let playerNum = parseInt(info[0].charAt(1)) - 1;
+        players[playerNum] = new Player(info[1], info[2], info[3]);
+        sock.to(thisCode).emit("confirm");
+    });*/
     /*
     sock.on('cpuTrue', (player, isSelected) => {
         io.emit('cpuTrue', player, isSelected);

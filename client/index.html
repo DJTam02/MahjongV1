@@ -27,6 +27,7 @@
             </div>
             <div id="player-select">
                 <div id="players">
+                    <p id="room-code">Room Code: </p>
                     <p>Players Connected</p>
                     <p id="player-num">0</p>
                 </div>
@@ -522,6 +523,7 @@
             var current = "start";
             var selected = "";
             var code = "";
+            var playerNum = 0;
         </script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="scripts/client.js"></script>
